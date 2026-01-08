@@ -5,10 +5,11 @@
   "description": "Production-grade Amazon-style e-commerce system built to master:",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrate": "node-pg-migrate",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write ."
   },
@@ -23,6 +24,7 @@
     "url": "https://github.com/metooabby/ecommerce-platform/issues"
   },
   "homepage": "https://github.com/metooabby/ecommerce-platform#readme",
+  "type": "module",
   "devDependencies": {
     "@types/node": "^25.0.3",
     "@types/pg": "^8.16.0",
@@ -30,7 +32,7 @@
     "@typescript-eslint/parser": "^8.52.0",
     "eslint": "^9.39.2",
     "prettier": "^3.7.4",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
