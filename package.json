@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-grade Amazon-style e-commerce system built to master:",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metooabby/ecommerce-platform.git"
+  },
+  "keywords": [],
+  "author": "Anurag Bhelsewale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metooabby/ecommerce-platform/issues"
+  },
+  "homepage": "https://github.com/metooabby/ecommerce-platform#readme"
+}
