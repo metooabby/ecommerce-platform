@@ -1,0 +1,6 @@
+{
+  "migrationsTable": "pgmigrations",
+  "migrationsDirectory": "migrations",
+  "migrationFileExtension": ".sql",
+  "timestamp": false
+}

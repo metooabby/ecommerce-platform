@@ -5,11 +5,11 @@
   "description": "Production-grade Amazon-style e-commerce system built to master:",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrate:up": "node-pg-migrate up",
-    "migrate:down": "node-pg-migrate down",
+    "migrate:up": "node-pg-migrate up --config-file node-pg-migrate.json --no-timestamp",
+    "migrate:down": "node-pg-migrate down --config-file node-pg-migrate.json --no-timestamp",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write ."
   },
