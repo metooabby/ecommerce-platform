@@ -1,17 +1,15 @@
 import { pool } from "./db/client.js";
+import { startServer } from "./server/server.js";
 
-async function start() {
-  console.log("Starting backend...");
+async function bootstrap() {
+  console.log("Booting backend…");
 
-  const result = await pool.query("SELECT 1");
-  if (result.rowCount !== 1) {
-    throw new Error("Database health check failed");
-  }
+  await pool.query("SELECT 1");
 
-  console.log("Database connected successfully");
+  startServer();
 }
 
-start().catch((err) => {
+bootstrap().catch((err) => {
   console.error("Fatal startup error:", err);
   process.exit(1);
 });
