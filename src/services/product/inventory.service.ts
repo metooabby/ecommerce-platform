@@ -1,4 +1,5 @@
 import { PoolClient } from "pg";
+import { InsufficientInventoryError } from "../../utils/errors/inventory.error.js";
 
 export async function decrementInventory(
   client: PoolClient,
@@ -16,6 +17,6 @@ export async function decrementInventory(
   );
 
   if (result.rowCount !== 1) {
-    throw new Error("Insufficient inventory");
+    throw new InsufficientInventoryError();
   }
 }

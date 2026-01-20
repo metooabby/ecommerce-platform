@@ -30,8 +30,8 @@ export function createApp() {
     app.post("/checkout", async (_req, res, next) => {
         try {
             const result = await createOrder({
-                userId: "REPLACE_WITH_REAL_USER_ID",
-                variantId: "REPLACE_WITH_VARIANT_ID",
+                userId: "5b9c2057-f049-4a29-ac6d-869a3aa653e3",
+                variantId: "d0c41c07-3da9-40fe-a1b3-5f5ae029ebed",
                 quantity: 1,
                 priceCents: 299900
             });
