@@ -36,22 +36,20 @@ export function ProductCard({ product, onAddToCart }: Props) {
 
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-xs font-semibold px-2 py-1 rounded ${
-                    inStock
+                  className={`text-xs font-semibold px-2 py-1 rounded ${inStock
                       ? "bg-green-100 text-green-700"
                       : "bg-red-100 text-red-700"
-                  }`}
+                    }`}
                 >
                   {inStock ? "In Stock" : "Out of Stock"}
                 </span>
 
                 <button
                   disabled={!inStock}
-                  className={`text-xs px-3 py-1 rounded ${
-                    inStock
-                      ? "bg-blue-600 text-white"
+                  className={`text-xs px-3 py-1 rounded transition ${inStock
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                  }`}
+                    }`}
                   onClick={() =>
                     onAddToCart({
                       variantId: variant.id,

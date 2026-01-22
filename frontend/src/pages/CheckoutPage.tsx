@@ -3,18 +3,18 @@ import { formatCurrency } from "../utils/currency";
 
 interface Props {
   items: CartItem[];
-  onBack: () => void;
-  onSubmit: () => Promise<void>;
   submitting: boolean;
   success: boolean;
+  onBack: () => void;
+  onSubmit: () => Promise<void>;
 }
 
 export function CheckoutPage({
   items,
-  onBack,
-  onSubmit,
   submitting,
-  success
+  success,
+  onBack,
+  onSubmit
 }: Props) {
   const total = items.reduce(
     (sum, item) => sum + item.priceCents * item.quantity,
@@ -66,7 +66,7 @@ export function CheckoutPage({
 
       <div className="flex justify-between">
         <button
-          className="text-sm text-gray-600"
+          className="text-sm text-gray-600 disabled:opacity-50"
           onClick={onBack}
           disabled={submitting}
         >
@@ -74,7 +74,7 @@ export function CheckoutPage({
         </button>
 
         <button
-          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-60"
+          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={onSubmit}
           disabled={submitting}
         >
