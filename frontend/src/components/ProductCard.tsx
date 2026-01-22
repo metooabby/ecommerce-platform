@@ -9,7 +9,8 @@ interface Props {
 
 export function ProductCard({ product, onAddToCart }: Props) {
   return (
-    <div className="border rounded-lg p-4 shadow-sm bg-white">
+    <div className="border rounded-lg p-4 shadow-sm bg-white transition
+                hover:shadow-md hover:-translate-y-0.5">
       <h2 className="text-lg font-semibold">{product.name}</h2>
 
       {product.description && (
@@ -46,7 +47,7 @@ export function ProductCard({ product, onAddToCart }: Props) {
 
                 <button
                   disabled={!inStock}
-                  className={`text-xs px-3 py-1 rounded transition ${inStock
+                  className={`text-xs px-3 py-1 rounded transition duration-150 ease-out hover:scale-[1.02] active:scale-[0.98] ${inStock
                       ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-gray-300 text-gray-600 cursor-not-allowed"
                     }`}

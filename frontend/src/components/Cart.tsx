@@ -36,7 +36,7 @@ export function Cart({ items, onRemove }: Props) {
                     </div>
 
                     <button
-                        className="text-red-600 text-xs"
+                        className="text-red-600 text-xs duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
                         onClick={() => onRemove(item.variantId)}
                     >
                         Remove

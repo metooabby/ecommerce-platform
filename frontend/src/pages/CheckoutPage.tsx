@@ -23,7 +23,7 @@ export function CheckoutPage({
 
   if (success) {
     return (
-      <div className="p-6 max-w-xl mx-auto text-center">
+      <div className="p-6 max-w-xl mx-auto text-center animate-pop-in">
         <h1 className="text-2xl font-bold text-green-600 mb-2">
           Order placed successfully
         </h1>
@@ -66,7 +66,7 @@ export function CheckoutPage({
 
       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
         <button
-          className="text-sm text-gray-600 disabled:opacity-50"
+          className="text-sm text-gray-600 disabled:opacity-50 duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
           onClick={onBack}
           disabled={submitting}
         >
@@ -74,7 +74,7 @@ export function CheckoutPage({
         </button>
 
         <button
-          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
           onClick={onSubmit}
           disabled={submitting}
         >
