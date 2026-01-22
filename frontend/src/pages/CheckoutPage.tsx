@@ -1,25 +1,33 @@
+import { useState } from "react";
 import type { CartItem } from "../types/cart";
 import { formatCurrency } from "../utils/currency";
 
 interface Props {
   items: CartItem[];
   submitting: boolean;
-  success: boolean;
   onBack: () => void;
   onSubmit: () => Promise<void>;
+  onOrderComplete: () => void;
 }
 
 export function CheckoutPage({
   items,
   submitting,
-  success,
   onBack,
-  onSubmit
+  onSubmit,
+  onOrderComplete
 }: Props) {
+  const [success, setSuccess] = useState(false);
+
   const total = items.reduce(
     (sum, item) => sum + item.priceCents * item.quantity,
     0
   );
+
+  async function handleSubmit() {
+    await onSubmit();
+    setSuccess(true);
+  }
 
   if (success) {
     return (
@@ -32,7 +40,10 @@ export function CheckoutPage({
         </p>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded"
-          onClick={onBack}
+          onClick={() => {
+            onOrderComplete(); // ✅ clear cart here
+            onBack();
+          }}
         >
           Back to products
         </button>
@@ -66,7 +77,9 @@ export function CheckoutPage({
 
       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
         <button
-          className="text-sm text-gray-600 disabled:opacity-50 duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
+          className="text-sm text-gray-600 disabled:opacity-50
+                     transition duration-150 ease-out
+                     hover:scale-[1.02] active:scale-[0.98]"
           onClick={onBack}
           disabled={submitting}
         >
@@ -74,8 +87,11 @@ export function CheckoutPage({
         </button>
 
         <button
-          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
-          onClick={onSubmit}
+          className="px-4 py-2 bg-green-600 text-white rounded
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition duration-150 ease-out
+                     hover:scale-[1.02] active:scale-[0.98]"
+          onClick={handleSubmit}
           disabled={submitting}
         >
           {submitting ? "Placing order…" : "Place Order"}
