@@ -7,6 +7,7 @@ import { Cart } from "../components/Cart";
 import type { CartItem } from "../types/cart";
 import { ProductCardSkeleton } from "../components/ProductCardSkeleton";
 import { Skeleton } from "../components/Skeleton";
+import { EmptyState } from "../components/EmptyState";
 
 interface CartState {
     items: CartItem[];
@@ -50,7 +51,23 @@ export function ProductListPage({ cart }: Props) {
     }
 
     if (error) {
-        return <div className="p-6 text-red-600">{error}</div>;
+        return (
+            <EmptyState
+                title="Unable to load products"
+                description="Something went wrong while fetching products."
+                actionLabel="Retry"
+                onAction={() => window.location.reload()}
+            />
+        );
+    }
+
+    if (products.length === 0) {
+        return (
+            <EmptyState
+                title="No products available"
+                description="Please check back later. New items will appear here."
+            />
+        );
     }
 
     return (
