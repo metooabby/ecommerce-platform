@@ -56,7 +56,7 @@ export function ProductListPage({ cart }: Props) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Product Grid */}
-            <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
+            <div className="lg:col-span-3 grid gap-6 grid-cols-1 sm:grid-cols-2">
                 {products.map((product) => (
                     <ProductCard
                         key={product.id}
@@ -67,10 +67,10 @@ export function ProductListPage({ cart }: Props) {
             </div>
 
             {/* Cart Sidebar */}
-            <div className="space-y-4">
+            <div className="space-y-4 lg:sticky lg:top-24">
                 {cart.items.length > 0 && (
                     <button
-                        className="w-full px-4 py-2 bg-green-600 text-white rounded"
+                        className="w-full px-4 py-3 bg-green-600 text-white rounded text-sm font-medium"
                         onClick={() => navigate("/checkout")}
                     >
                         Proceed to Checkout

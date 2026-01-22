@@ -14,7 +14,7 @@ export function AppLayout({ children, cartCount }: Props) {
       <header className="bg-white shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
-            className="text-xl font-bold text-blue-600"
+            className="text-xl font-bold text-blue-600 py-2"
             onClick={() => navigate("/products")}
           >
             E-Commerce
@@ -22,7 +22,7 @@ export function AppLayout({ children, cartCount }: Props) {
 
           <div className="relative">
             <button
-              className="text-sm font-medium"
+              className="text-sm font-medium py-2"
               onClick={() => navigate("/checkout")}
             >
               Cart

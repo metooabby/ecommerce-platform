@@ -41,7 +41,7 @@ export function CheckoutPage({
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
 
       <div className="border rounded p-4 space-y-3 mb-4">
@@ -64,7 +64,7 @@ export function CheckoutPage({
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
         <button
           className="text-sm text-gray-600 disabled:opacity-50"
           onClick={onBack}
