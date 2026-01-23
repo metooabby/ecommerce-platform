@@ -1,21 +1,12 @@
-import { createApp } from "./app.js";
+import { createApp } from "./app";
+import { env } from "../config";
 
-const PORT = process.env.PORT || 4000;
+async function startServer() {
+  const app = await createApp();
 
-export function startServer() {
-  const app = createApp();
-
-  const server = app.listen(PORT, () => {
-    console.log(`HTTP server running on port ${PORT}`);
+  app.listen(env.port, () => {
+    console.log(`Server running on port ${env.port}`);
   });
-
-  const shutdown = () => {
-    console.log("Graceful shutdown initiated");
-    server.close(() => {
-      process.exit(0);
-    });
-  };
-
-  process.on("SIGTERM", shutdown);
-  process.on("SIGINT", shutdown);
 }
+
+startServer();
