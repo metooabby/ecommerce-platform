@@ -1,13 +1,16 @@
 import express from "express";
 import cors from "cors";
-import { requestLogger } from "./middleware/requestLogger.js";
-import { errorHandler } from "./middleware/errorHandler.js";
+import { requestContext } from "../logger/requestContext.js";
+import { requestLogger } from "../middleware/requestLogger.js";
+import { errorHandler } from "../middleware/errorHandler.js";
 import { getAllProducts } from "../services/index.js";
 import { createOrder } from "../services/order/order.service.js";
+
 
 export function createApp() {
     const app = express();
     // Enable CORS for frontend
+    app.use(requestContext);
     app.use(
         cors({
             origin: "http://localhost:5173"
