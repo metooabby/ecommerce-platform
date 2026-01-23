@@ -1,15 +1,8 @@
-import { pool } from "./db/client.js";
-import { startServer } from "./server/server.js";
+import { createApp } from "./server/app";
+import { env } from "./config";
 
-async function bootstrap() {
-  console.log("Booting backend…");
+const app = createApp();
 
-  await pool.query("SELECT 1");
-
-  startServer();
-}
-
-bootstrap().catch((err) => {
-  console.error("Fatal startup error:", err);
-  process.exit(1);
+app.listen(env.port, () => {
+  console.log(`Server running on port ${env.port}`);
 });
