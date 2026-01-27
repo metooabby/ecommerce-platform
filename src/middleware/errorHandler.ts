@@ -1,22 +1,16 @@
 import type { Request, Response, NextFunction } from "express";
-import { log } from "../logger/index.js";
 
 export function errorHandler(
   err: unknown,
-  req: Request,
+  _req: Request,
   res: Response,
   _next: NextFunction
 ) {
-  log("error", "request failed", {
-    requestId: req.requestId,
-    error:
-      err instanceof Error
-        ? { message: err.message, stack: err.stack }
-        : err
-  });
+  // Never throw from the error handler
+  const message =
+    err instanceof Error ? err.message : "Internal server error";
 
   res.status(500).json({
-    error: "Internal server error",
-    requestId: req.requestId
+    message,
   });
 }
