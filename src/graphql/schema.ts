@@ -19,4 +19,8 @@ export const typeDefs = `#graphql
   type Query {
     products: [Product!]!
   }
+  type Mutation {
+    adminPing: String!
+}
+
 `;
