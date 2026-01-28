@@ -1,14 +1,12 @@
 import type { Request } from "express";
-import { pool } from "../db/client.js";
+import type { AuthUser } from "../auth/auth.types.js";
 
 export interface GraphQLContext {
-  requestId?: string;
-  db: typeof pool;
+  user: AuthUser | null;
 }
 
 export function createContext(req: Request): GraphQLContext {
   return {
-    requestId: req.requestId,
-    db: pool
+    user: req.user ?? null,
   };
 }

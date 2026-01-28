@@ -1,7 +1,12 @@
-import "express";
+import type { AuthUser } from "../auth/auth.types.js";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    requestId?: string;
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthUser | null;
+      requestId?: string;
+    }
   }
 }
+
+export {};

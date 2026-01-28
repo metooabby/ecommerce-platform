@@ -15,6 +15,8 @@ import { typeDefs } from "../graphql/schema.js";
 import { resolvers } from "../graphql/resolvers.js";
 import { createContext, type GraphQLContext } from "../graphql/context.js";
 
+import { authMiddleware } from "../auth/auth.middleware.js";
+
 export async function createApp() {
   const app = express();
 
@@ -72,6 +74,8 @@ export async function createApp() {
 
   // 7️⃣ Error handler (LAST)
   app.use(errorHandler);
+
+  app.use(authMiddleware);
 
   return app;
 }
