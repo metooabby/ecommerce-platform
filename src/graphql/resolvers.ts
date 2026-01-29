@@ -29,8 +29,6 @@ export const resolvers = {
           userId: ctx.user.id,
           variantId: args.variantId,
           quantity: args.quantity,
-          // price is derived in DB layer
-          priceCents: 0
         });
 
         return result;

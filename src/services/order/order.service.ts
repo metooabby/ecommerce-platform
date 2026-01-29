@@ -5,7 +5,6 @@ export async function createOrder(params: {
   userId: string;
   variantId: string;
   quantity: number;
-  priceCents: number;
 }) {
   return withTransaction(async (client) => {
     await decrementInventory(
@@ -14,13 +13,31 @@ export async function createOrder(params: {
       params.quantity
     );
 
+    const priceResult = await client.query(
+      `
+  SELECT price_cents
+  FROM product_prices
+  WHERE variant_id = $1
+    AND valid_to IS NULL
+  `,
+      [params.variantId]
+    );
+
+    if (priceResult.rowCount === 0) {
+      throw new Error("Active price not found");
+    }
+
+    const priceCents = priceResult.rows[0].price_cents;
+    const totalAmount = priceCents * params.quantity;
+
+
     const orderResult = await client.query(
       `
       INSERT INTO orders (user_id, status, total_amount_cents)
       VALUES ($1, 'PAID', $2)
       RETURNING id
       `,
-      [params.userId, params.priceCents * params.quantity]
+      [params.userId, totalAmount]
     );
 
     const orderId = orderResult.rows[0].id;
