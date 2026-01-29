@@ -17,13 +17,4 @@ export const resolvers = {
       }
     ),
   },
-  Mutation: {
-    // 🔒 Example admin-only mutation
-    adminPing: withErrorHandling(
-      async (_parent, _args, ctx: GraphQLContext) => {
-        requireRole(ctx.user, ["ADMIN"]);
-        return "pong";
-      }
-    ),
-  },
 };

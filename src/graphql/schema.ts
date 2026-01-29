@@ -1,10 +1,17 @@
-export const typeDefs = `#graphql
-  type ProductVariant {
-    id: ID!
-    sku: String!
-    priceCents: Int!
-    inventoryCount: Int!
-    attributes: JSON
+export const typeDefs = `
+  type Query {
+    products: [Product!]!
+  }
+
+  type Mutation {
+    placeOrder(
+      variantId: ID!
+      quantity: Int!
+    ): PlaceOrderResult!
+  }
+
+  type PlaceOrderResult {
+    orderId: ID!
   }
 
   type Product {
@@ -14,13 +21,10 @@ export const typeDefs = `#graphql
     variants: [ProductVariant!]!
   }
 
-  scalar JSON
-
-  type Query {
-    products: [Product!]!
+  type ProductVariant {
+    id: ID!
+    sku: String!
+    inventoryCount: Int!
+    priceCents: Int!
   }
-  type Mutation {
-    adminPing: String!
-}
-
 `;
