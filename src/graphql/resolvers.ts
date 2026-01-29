@@ -10,9 +10,7 @@ export const resolvers = {
     products: withErrorHandling(
       async (_parent: unknown, _args: unknown, ctx: GraphQLContext) => {
         if (!ctx.user) {
-          throw new GraphQLError("Not authenticated", {
-            extensions: { code: "UNAUTHENTICATED" },
-          });
+         requireRole(ctx.user, ["USER", "ADMIN"]);
         }
 
         return getAllProducts();

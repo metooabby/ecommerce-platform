@@ -1,23 +1,26 @@
 import { GraphQLError } from "graphql";
-import { DomainError } from "../domain/errors/DomainError.js";
+import {
+  AuthenticationError,
+  AuthorizationError,
+} from "../auth/auth.errors.js";
 
-/**
- * Maps domain and unknown errors to GraphQL errors
- */
 export function mapToGraphQLError(error: unknown): GraphQLError {
-  // Domain (business) errors → client-safe GraphQL errors
-  if (error instanceof DomainError) {
+  if (error instanceof AuthenticationError) {
     return new GraphQLError(error.message, {
-      extensions: {
-        code: error.code,
-      },
+      extensions: { code: error.code },
     });
   }
 
-  // Unknown / system errors → generic internal error
+  if (error instanceof AuthorizationError) {
+    return new GraphQLError(error.message, {
+      extensions: { code: error.code },
+    });
+  }
+
+  // existing mappings below 👇
+  // ProductError, OrderError, etc.
+
   return new GraphQLError("Internal server error", {
-    extensions: {
-      code: "INTERNAL_SERVER_ERROR",
-    },
+    extensions: { code: "INTERNAL_SERVER_ERROR" },
   });
 }
