@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 
+import { authMiddleware } from "../auth/auth.middleware.js";
 import { requestContext } from "../logger/requestContext.js";
 import { requestLogger } from "../middleware/requestLogger.js";
 import { errorHandler } from "../middleware/errorHandler.js";
@@ -15,13 +16,14 @@ import { typeDefs } from "../graphql/schema.js";
 import { resolvers } from "../graphql/resolvers.js";
 import { createContext, type GraphQLContext } from "../graphql/context.js";
 
-import { authMiddleware } from "../auth/auth.middleware.js";
-
 export async function createApp() {
   const app = express();
 
   // 1️⃣ Request context (adds requestId)
   app.use(requestContext);
+
+   // 2️⃣ AUTH
+  app.use(authMiddleware);
 
   // 2️⃣ CORS
   app.use(
@@ -74,8 +76,6 @@ export async function createApp() {
 
   // 7️⃣ Error handler (LAST)
   app.use(errorHandler);
-
-  app.use(authMiddleware);
 
   return app;
 }
