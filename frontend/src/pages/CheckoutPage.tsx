@@ -1,23 +1,24 @@
 import { useState } from "react";
 import type { CartItem } from "../types/cart";
 import { formatCurrency } from "../utils/currency";
+import { useCheckout } from "../hooks/useCheckout";
 
 interface Props {
   items: CartItem[];
-  submitting: boolean;
   onBack: () => void;
-  onSubmit: () => Promise<void>;
-  onOrderComplete: () => void;
+  onOrderComplete: () => void; // clears cart
 }
 
 export function CheckoutPage({
   items,
-  submitting,
   onBack,
-  onSubmit,
   onOrderComplete
 }: Props) {
   const [success, setSuccess] = useState(false);
+
+  const { submitOrder, loading, error } = useCheckout(() => {
+    setSuccess(true);
+  });
 
   const total = items.reduce(
     (sum, item) => sum + item.priceCents * item.quantity,
@@ -25,10 +26,12 @@ export function CheckoutPage({
   );
 
   async function handleSubmit() {
-    await onSubmit();
-    setSuccess(true);
+    await submitOrder(items);
   }
 
+  /* =======================
+     SUCCESS STATE
+  ======================= */
   if (success) {
     return (
       <div className="p-6 max-w-xl mx-auto text-center animate-pop-in">
@@ -36,13 +39,13 @@ export function CheckoutPage({
           Order placed successfully
         </h1>
         <p className="text-gray-600 mb-6">
-          This is a mocked checkout. Backend integration comes later.
+          Your order has been processed successfully.
         </p>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded"
           onClick={() => {
-            onOrderComplete(); // ✅ clear cart here
-            onBack();
+            onOrderComplete();
+            onBack();        
           }}
         >
           Back to products
@@ -51,6 +54,9 @@ export function CheckoutPage({
     );
   }
 
+  /* =======================
+     CHECKOUT FORM
+  ======================= */
   return (
     <div className="p-4 sm:p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
@@ -75,13 +81,19 @@ export function CheckoutPage({
         </div>
       </div>
 
+      {error && (
+        <p className="text-red-600 text-sm mb-3">
+          {error.message}
+        </p>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
         <button
           className="text-sm text-gray-600 disabled:opacity-50
                      transition duration-150 ease-out
                      hover:scale-[1.02] active:scale-[0.98]"
           onClick={onBack}
-          disabled={submitting}
+          disabled={loading}
         >
           ← Back
         </button>
@@ -92,9 +104,9 @@ export function CheckoutPage({
                      transition duration-150 ease-out
                      hover:scale-[1.02] active:scale-[0.98]"
           onClick={handleSubmit}
-          disabled={submitting}
+          disabled={loading || items.length === 0}
         >
-          {submitting ? "Placing order…" : "Place Order"}
+          {loading ? "Placing order…" : "Place Order"}
         </button>
       </div>
     </div>
