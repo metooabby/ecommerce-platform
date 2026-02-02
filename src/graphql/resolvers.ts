@@ -16,22 +16,21 @@ export const resolvers = {
     placeOrder: withErrorHandling(
       async (
         _: unknown,
-        args: { variantId: string; quantity: number },
+        args: {
+          items: {
+            variantId: string;
+            quantity: number;
+          }[];
+        },
         ctx: GraphQLContext
       ) => {
-        // 🔒 Auth required
-        if (!ctx.user) {
-          throw new Error("Authentication required");
-        }
+        // 🔒 Auth guaranteed by resolver wrapper
+        const userId = ctx.user!.id;
 
-        // 🧠 Delegate to domain/service layer
-        const result = await createOrder({
-          userId: ctx.user.id,
-          variantId: args.variantId,
-          quantity: args.quantity,
+        return createOrder({
+          userId,
+          items: args.items,
         });
-
-        return result;
       }
     ),
   },

@@ -12,10 +12,11 @@ interface Props {
 export function CheckoutPage({
   items,
   onBack,
-  onOrderComplete
+  onOrderComplete,
 }: Props) {
   const [success, setSuccess] = useState(false);
 
+  // ✅ SINGLE hook usage (no duplicates)
   const { submitOrder, loading, error } = useCheckout(() => {
     setSuccess(true);
   });
@@ -45,7 +46,7 @@ export function CheckoutPage({
           className="px-4 py-2 bg-blue-600 text-white rounded"
           onClick={() => {
             onOrderComplete();
-            onBack();        
+            onBack();
           }}
         >
           Back to products
@@ -89,9 +90,7 @@ export function CheckoutPage({
 
       <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
         <button
-          className="text-sm text-gray-600 disabled:opacity-50
-                     transition duration-150 ease-out
-                     hover:scale-[1.02] active:scale-[0.98]"
+          className="text-sm text-gray-600 disabled:opacity-50"
           onClick={onBack}
           disabled={loading}
         >
@@ -100,9 +99,7 @@ export function CheckoutPage({
 
         <button
           className="px-4 py-2 bg-green-600 text-white rounded
-                     disabled:opacity-50 disabled:cursor-not-allowed
-                     transition duration-150 ease-out
-                     hover:scale-[1.02] active:scale-[0.98]"
+                     disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleSubmit}
           disabled={loading || items.length === 0}
         >

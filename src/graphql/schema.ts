@@ -1,17 +1,9 @@
 export const typeDefs = `
-  type Query {
-    products: [Product!]!
-  }
-
-  type Mutation {
-    placeOrder(
-      variantId: ID!
-      quantity: Int!
-    ): PlaceOrderResult!
-  }
-
-  type PlaceOrderResult {
-    orderId: ID!
+  type ProductVariant {
+    id: ID!
+    sku: String!
+    priceCents: Int!
+    inventoryCount: Int!
   }
 
   type Product {
@@ -21,10 +13,23 @@ export const typeDefs = `
     variants: [ProductVariant!]!
   }
 
-  type ProductVariant {
-    id: ID!
-    sku: String!
-    inventoryCount: Int!
-    priceCents: Int!
+  type Query {
+    products: [Product!]!
+  }
+
+  """
+  Input for a single cart item during checkout
+  """
+  input OrderItemInput {
+    variantId: ID!
+    quantity: Int!
+  }
+
+  type PlaceOrderResult {
+    orderId: ID!
+  }
+
+  type Mutation {
+    placeOrder(items: [OrderItemInput!]!): PlaceOrderResult!
   }
 `;

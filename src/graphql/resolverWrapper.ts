@@ -24,6 +24,7 @@ export function withErrorHandling<
     try {
       return await resolver(parent, args, context);
     } catch (error) {
+      console.log("ERROR:", error)
       throw mapToGraphQLError(error);
     }
   };
