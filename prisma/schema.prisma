@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model cart_items {
+  cart_id          String           @db.Uuid
+  variant_id       String           @db.Uuid
+  quantity         Int
+  carts            carts            @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product_variants product_variants @relation(fields: [variant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([cart_id, variant_id])
+}
+
+model carts {
+  id         String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id    String       @unique @db.Uuid
+  created_at DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at DateTime     @default(now()) @db.Timestamptz(6)
+  cart_items cart_items[]
+  users      users        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([user_id], map: "idx_cart_user")
+}
+
+model categories {
+  id               String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name             String
+  parent_id        String?      @db.Uuid
+  created_at       DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime     @default(now()) @db.Timestamptz(6)
+  categories       categories?  @relation("categoriesTocategories", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_categories categories[] @relation("categoriesTocategories")
+  products         products[]
+
+  @@unique([name, parent_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model order_items {
+  order_id     String @db.Uuid
+  product_name String
+  sku          String
+  price_cents  Int
+  quantity     Int
+  orders       orders @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([order_id, sku])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model orders {
+  id                 String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id            String        @db.Uuid
+  status             String
+  total_amount_cents Int
+  currency           String        @default("INR")
+  created_at         DateTime      @default(now()) @db.Timestamptz(6)
+  order_items        order_items[]
+  users              users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payments           payments[]
+
+  @@index([user_id], map: "idx_order_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model payments {
+  id                 String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  order_id           String   @db.Uuid
+  provider           String
+  provider_reference String?
+  amount_cents       Int
+  status             String
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  orders             orders   @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([order_id], map: "idx_payment_order")
+}
+
+model pgmigrations {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255)
+  run_on DateTime @db.Timestamp(6)
+}
+
+model product_prices {
+  id               String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  variant_id       String           @db.Uuid
+  price_cents      Int
+  currency         String           @default("INR")
+  valid_from       DateTime         @default(now()) @db.Timestamptz(6)
+  valid_to         DateTime?        @db.Timestamptz(6)
+  product_variants product_variants @relation(fields: [variant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([variant_id], map: "idx_prices_variant")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model product_variants {
+  id              String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id      String           @db.Uuid
+  sku             String           @unique
+  attributes      Json
+  inventory_count Int              @default(0)
+  created_at      DateTime         @default(now()) @db.Timestamptz(6)
+  cart_items      cart_items[]
+  product_prices  product_prices[]
+  products        products         @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([id, inventory_count], map: "idx_variant_inventory")
+  @@index([product_id], map: "idx_variants_product")
+}
+
+model products {
+  id               String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name             String
+  description      String?
+  category_id      String             @db.Uuid
+  is_active        Boolean            @default(true)
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime           @default(now()) @db.Timestamptz(6)
+  product_variants product_variants[]
+  categories       categories         @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([category_id], map: "idx_products_category")
+}
+
+model roles {
+  id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String       @unique
+  description String?
+  created_at  DateTime     @default(now()) @db.Timestamptz(6)
+  user_roles  user_roles[]
+}
+
+model user_roles {
+  user_id String @db.Uuid
+  role_id String @db.Uuid
+  roles   roles  @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, role_id])
+  @@index([role_id], map: "idx_user_roles_role_id")
+  @@index([user_id], map: "idx_user_roles_user_id")
+}
+
+model users {
+  id            String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email         String       @unique
+  password_hash String
+  is_active     Boolean      @default(true)
+  created_at    DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime     @default(now()) @db.Timestamptz(6)
+  deleted_at    DateTime?    @db.Timestamptz(6)
+  carts         carts?
+  orders        orders[]
+  user_roles    user_roles[]
+
+  @@index([email], map: "idx_users_email")
+}
