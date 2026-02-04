@@ -37,4 +37,17 @@ export const typeDefs = `
     placeOrder(items: [OrderItemInput!]!): PlaceOrderResult!
     createPaymentIntent(orderId: ID!): PaymentIntent!
   }
+
+  type VerifyPaymentResult {
+    success: Boolean!
+}
+
+  extend type Mutation {
+    verifyRazorpayPayment(
+    orderId: ID!
+    razorpayOrderId: String!
+    razorpayPaymentId: String!
+    razorpaySignature: String!
+  ): VerifyPaymentResult!
+}
 `;

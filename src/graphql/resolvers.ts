@@ -4,6 +4,7 @@ import { getAllProducts } from "../services/index.js";
 import { createOrder } from "../services/order/order.service.js";
 import { createPaymentIntent } from "../services/payment/payment.service.js";
 import { prisma } from "../db/prisma.js";
+import { verifyRazorpayPayment } from "../services/payment/payment.verify.service.js";
 
 export const resolvers = {
   Query: {
@@ -58,5 +59,22 @@ export const resolvers = {
         });
       }
     ),
+    verifyRazorpayPayment: withErrorHandling<
+      unknown,
+      {
+        orderId: string;
+        razorpayOrderId: string;
+        razorpayPaymentId: string;
+        razorpaySignature: string;
+      },
+      GraphQLContext,
+      { success: boolean }
+    >(async (_parent, args, ctx) => {
+      return verifyRazorpayPayment({
+        ...args,
+        user: ctx.user,
+        prisma,
+      });
+    }),
   },
 };
