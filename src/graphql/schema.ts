@@ -17,9 +17,6 @@ export const typeDefs = `
     products: [Product!]!
   }
 
-  """
-  Input for a single cart item during checkout
-  """
   input OrderItemInput {
     variantId: ID!
     quantity: Int!
@@ -29,7 +26,15 @@ export const typeDefs = `
     orderId: ID!
   }
 
+  type PaymentIntent {
+    paymentId: ID!
+    razorpayOrderId: String!
+    amount: Int!
+    currency: String!
+  }
+
   type Mutation {
     placeOrder(items: [OrderItemInput!]!): PlaceOrderResult!
+    createPaymentIntent(orderId: ID!): PaymentIntent!
   }
 `;
